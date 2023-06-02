@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/consumer")
 public class MainController {
 
-    @Getter @Setter
-    private Integer unansweredRequests = 0;
+    @Getter
+    @Setter
+    private Integer unansweredRequests = 1;
 
     @Data
     private static class RequestDTO {
         Integer id;
-        String meta;
     }
 
     @PostMapping("/accept-action")
@@ -42,18 +42,17 @@ public class MainController {
     @PostMapping("/accept-action-randomly")
     @ResponseBody
     public ResponseEntity<String> AcceptActionRandomly(@NotNull @RequestBody RequestDTO request) throws InterruptedException {
-        log.info("Get request to /accept-action-randomly with id=" + request.getId().toString());
+        log.info("Get request to /accept-action-randomly with id=" + request.getId().toString() +
+                ". Relative id #" + unansweredRequests);
         if (unansweredRequests <= 2) {
             log.info("Accept request. Do the action. Do not answer to request");
             setUnansweredRequests(unansweredRequests + 1);
-            Thread.sleep(5000);
+            Thread.sleep(1000);
             return new ResponseEntity<>(HttpStatus.GATEWAY_TIMEOUT);
-        } else {
-            log.info("Accept request. Do the action. Answer to request");
-            setUnansweredRequests(0);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
+        log.info("Accept request. Do the action. Answer to request");
+        setUnansweredRequests(1);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
 
 }
