@@ -14,10 +14,10 @@ public class Action {
     @Column
     private Long duplicatesCount = 0L;
 
-    Action() {
+    public Action() {
     }
 
-    Action(@NotNull Long id, Long duplicatesCount) {
+    public Action(@NotNull Long id, Long duplicatesCount) {
         this.id = id;
         this.duplicatesCount = duplicatesCount;
     }
@@ -32,6 +32,10 @@ public class Action {
 
     public Long getDuplicatesCount() {
         return duplicatesCount;
+    }
+
+    public void incrementDuplicatesCount() {
+        duplicatesCount += 1;
     }
 
     public void setDuplicatesCount(Long duplicatesCount) {

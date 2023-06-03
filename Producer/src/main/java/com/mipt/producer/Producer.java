@@ -35,11 +35,10 @@ public class Producer {
     }
 
     /*
-     * Send single request to consumer
+     * Send request with a specific id
      */
     @SneakyThrows
-    public void SendRequest(String url) {
-        Long requestId = currentId.incrementAndGet();
+    public void SendRequest(String url, Long requestId) {
         String requestBody = getRequestBody(requestId);
         HttpRequest http_request = HttpRequest.newBuilder()
                 .uri(new URI(url))
@@ -57,17 +56,27 @@ public class Producer {
     }
 
     /*
+     * Send single request to consumer with unique id
+     */
+    @SneakyThrows
+    public void SendRequest(String url) {
+        Long requestId = currentId.incrementAndGet();
+        SendRequest(url, requestId);
+    }
+
+    /*
      * Send request with timeout catching to consumer.
      * Retry if any errors occurred.
      */
     public void SendRetryingRequest(String url, Long timeout) {
+        Long requestId = currentId.incrementAndGet();
         log.info("Start processing retrying request to url=" + url + " with timeout=" + timeout);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         while (attemptsLeft != 0) {
             try {
                 attemptsLeft -= 1;
                 log.info("Trying to send request");
-                Future<?> future = executorService.submit(() -> SendRequest(url));
+                Future<?> future = executorService.submit(() -> SendRequest(url, requestId));
                 future.get(timeout, TimeUnit.SECONDS);
                 break;
             } catch (TimeoutException e) {
