@@ -1,10 +1,12 @@
 package com.mipt.consumer.controllers;
 
+import com.mipt.consumer.model.ActionsRepository;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/consumer")
 public class MainController {
+
+    @Autowired
+    ActionsRepository actionsRepository;
 
     @Getter
     @Setter
@@ -28,6 +33,7 @@ public class MainController {
     public ResponseEntity<String> AcceptAction(@RequestBody RequestDTO request) {
         log.info("Get request to /accept-action with id=" + request.getId().toString());
         log.info("Accept request. Do the action. Answer to request");
+        // actionsRepository.findById(request.getId());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
