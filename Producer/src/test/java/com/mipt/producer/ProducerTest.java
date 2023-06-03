@@ -2,6 +2,8 @@ package com.mipt.producer;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeoutException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProducerTest {
@@ -13,7 +15,7 @@ class ProducerTest {
         String acceptingUrl = "http://localhost:8080/consumer/accept-action";
         assertDoesNotThrow(() -> producer.SendRequest(acceptingUrl));
         String denyingUrl = "http://localhost:8080/consumer/deny-action";
-        assertDoesNotThrow(() -> producer.SendRequest(denyingUrl));
+        assertThrows(TimeoutException.class, () -> producer.SendRequest(denyingUrl));
     }
 
     @Test
