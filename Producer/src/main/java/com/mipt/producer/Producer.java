@@ -2,6 +2,7 @@ package com.mipt.producer;
 
 import com.google.gson.Gson;
 
+import com.mipt.producer.model.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -17,6 +18,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class Producer {
+
+    CircuitBreaker circuitBreaker = new CircuitBreaker();
 
     @Data
     @AllArgsConstructor
@@ -39,6 +42,10 @@ public class Producer {
      */
     @SneakyThrows
     public void SendRequest(String url, Long requestId) {
+        if (circuitBreaker.processCircuitBreaker()) {
+            log.warn("Circuit Breaker is closed. Can not send request");
+            return;
+        }
         String requestBody = getRequestBody(requestId);
         HttpRequest http_request = HttpRequest.newBuilder()
                 .uri(new URI(url))

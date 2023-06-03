@@ -2,15 +2,16 @@ package com.mipt.consumer.controllers;
 
 import com.mipt.consumer.model.Action;
 import com.mipt.consumer.model.ActionsRepository;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.support.CustomSQLErrorCodesTranslation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
