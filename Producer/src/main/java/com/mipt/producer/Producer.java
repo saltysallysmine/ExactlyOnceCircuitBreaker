@@ -7,15 +7,13 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class Producer {
@@ -23,12 +21,13 @@ public class Producer {
     @Data
     @AllArgsConstructor
     private static class Request {
-        Integer id;
+        Long id;
     }
 
-    private final AtomicInteger currentId = new AtomicInteger(0);
+    private final AtomicLong currentId = new AtomicLong(0);
+    private int attemptsLeft = 3;
 
-    private String getRequestBody(Integer id) {
+    private String getRequestBody(Long id) {
         Request request = new Request(id);
         Gson gson = new Gson();
         log.info("Make request body: " + gson.toJson(request));
@@ -40,7 +39,7 @@ public class Producer {
      */
     @SneakyThrows
     public void SendRequest(String url) {
-        Integer requestId = currentId.incrementAndGet();
+        Long requestId = currentId.incrementAndGet();
         String requestBody = getRequestBody(requestId);
         HttpRequest http_request = HttpRequest.newBuilder()
                 .uri(new URI(url))
@@ -64,7 +63,6 @@ public class Producer {
     public void SendRetryingRequest(String url, Long timeout) {
         log.info("Start processing retrying request to url=" + url + " with timeout=" + timeout);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        int attemptsLeft = 3;
         while (attemptsLeft != 0) {
             try {
                 attemptsLeft -= 1;
