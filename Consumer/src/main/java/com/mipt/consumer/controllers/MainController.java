@@ -16,11 +16,11 @@ public class MainController {
 
     @Getter
     @Setter
-    private Integer unansweredRequests = 1;
+    private Long unansweredRequests = 1L;
 
     @Data
     private static class RequestDTO {
-        Integer id;
+        Long id;
     }
 
     @PostMapping("/accept-action")
@@ -51,7 +51,7 @@ public class MainController {
             return new ResponseEntity<>(HttpStatus.GATEWAY_TIMEOUT);
         }
         log.info("Accept request. Do the action. Answer to request");
-        setUnansweredRequests(1);
+        setUnansweredRequests(1L);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
