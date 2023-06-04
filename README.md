@@ -1,8 +1,19 @@
-# Exactly one delivery guarantee with Circuit Breaker.
+# Exactly once delivery guarantee with Circuit Breaker.
 
 Подробный запуск тестов описан в файле ProducerTest. Каждый тест стоит запускать отдельно, предварительно перезапустив ConsumerMain. Он не был обёрнут в Mock, так как для проверки важны логи, которые он оставляет.
 
 > Для лучшего понимания того, что происходит в обоих микросервисах, их нужно запускать раздельно. Перезапускайте Consumer и выполняйте следующий тест. Проверяйте в логи обоих приложений.
+
+## Подготовка приложения
+
+Приложение использует базу данных Prostgres, поэтому перед запуском тестов выполните в консоли следующие команды:
+
+```bash
+sudo su - postgres
+psql
+CREATE DATABASE performed_actions;
+ALTER USER postgres WITH PASSWORD 'password';
+```
 
 ## Consumer
 
