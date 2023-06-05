@@ -3,7 +3,7 @@ package com.mipt.consumer.controllers;
 import com.mipt.consumer.model.Action;
 import com.mipt.consumer.model.ActionsRepository;
 
-import lombok.Data;
+import com.mipt.consumer.model.RequestDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,6 @@ public class MainController {
     @Getter
     @Setter
     private Long unansweredRequests = 1L;
-
-    @Data
-    private static class RequestDTO {
-        Long id;
-    }
 
     /*
      * Process new action from request and return true if it is unique
